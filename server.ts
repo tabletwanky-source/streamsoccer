@@ -2,6 +2,13 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+import { register, login, getMe } from "./src/routes/auth.js";
+import { getFavorites, createFavorite, deleteFavorite } from "./src/routes/favorites.js";
+import { getPosts, createPost, deletePost } from "./src/routes/posts.js";
+import { authenticateToken } from "./src/middleware/auth.js";
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +16,23 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  app.use(express.json());
+
+  // Authentication routes
+  app.post("/api/register", register);
+  app.post("/api/login", login);
+  app.get("/api/me", authenticateToken, getMe);
+
+  // Favorites routes
+  app.get("/api/favorites", authenticateToken, getFavorites);
+  app.post("/api/favorites", authenticateToken, createFavorite);
+  app.delete("/api/favorites/:id", authenticateToken, deleteFavorite);
+
+  // Posts routes
+  app.get("/api/posts", authenticateToken, getPosts);
+  app.post("/api/posts", authenticateToken, createPost);
+  app.delete("/api/posts/:id", authenticateToken, deletePost);
 
   // Generic API Proxy for Football Data
   app.get("/api/football/*", async (req, res) => {
