@@ -30,7 +30,9 @@ import {
   Settings,
   Menu,
   X,
-  Plus
+  Plus,
+  Check,
+  Send
 } from "lucide-react";
 
 // --- Types ---
@@ -92,7 +94,223 @@ interface Article {
   isAd?: boolean;
 }
 
-type Page = "home" | "news" | "matches" | "teams" | "tournaments" | "admin";
+type Page = "home" | "news" | "matches" | "teams" | "tournaments" | "admin" | "about" | "privacy" | "terms" | "contact";
+type Language = "en" | "es" | "fr" | "pt";
+
+const TRANSLATIONS = {
+  en: {
+    home: "Home",
+    news: "News",
+    matches: "Matches",
+    teams: "Teams",
+    tournaments: "Tournaments",
+    admin: "Admin",
+    about: "About Us",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
+    contact: "Contact",
+    liveNews: "Live News",
+    latestNews: "Latest News",
+    sponsored: "Sponsored Content",
+    readMore: "Read More",
+    liveMatches: "Live Matches",
+    allLeagues: "All Leagues",
+    topTeams: "Top Teams",
+    selectTeam: "Select a team to view squad",
+    majorLeagues: "Major Leagues",
+    standings: "League Standings",
+    adminPanel: "Admin Panel",
+    publish: "Publish Article",
+    ourStory: "Our Story",
+    legal: "Legal",
+    support: "Support",
+    contactUs: "Contact Us",
+    name: "Your Name",
+    email: "Email Address",
+    message: "Message",
+    send: "Send Message",
+    sent: "Message Sent!",
+    agenda: "Agenda",
+    realtime: "Real-time",
+    winBig: "Win Big with GoalStream Premium",
+    learnMore: "Learn More",
+    allRights: "All Rights Reserved",
+    featuredStory: "Featured Story",
+    description: "The ultimate destination for football fans. Real-time scores, breaking news, and in-depth analysis from the world of football.",
+    loading: "Loading...",
+    error: "Error",
+    noMatches: "No matches scheduled for today.",
+    refresh: "Refresh",
+    pos: "Pos",
+    club: "Club",
+    mp: "MP",
+    gd: "GD",
+    pts: "Pts",
+    table: "Table",
+    giants: "Global Giants",
+    elite: "Elite",
+    competitions: "Competitions"
+  },
+  es: {
+    home: "Inicio",
+    news: "Noticias",
+    matches: "Partidos",
+    teams: "Equipos",
+    tournaments: "Torneos",
+    admin: "Admin",
+    about: "Sobre Nosotros",
+    privacy: "Privacidad",
+    terms: "Términos",
+    contact: "Contacto",
+    liveNews: "Noticias en Vivo",
+    latestNews: "Últimas Noticias",
+    sponsored: "Contenido Patrocinado",
+    readMore: "Leer Más",
+    liveMatches: "Partidos en Vivo",
+    allLeagues: "Todas las Ligas",
+    topTeams: "Mejores Equipos",
+    selectTeam: "Selecciona un equipo para ver la plantilla",
+    majorLeagues: "Grandes Ligas",
+    standings: "Clasificación",
+    adminPanel: "Panel de Admin",
+    publish: "Publicar Artículo",
+    ourStory: "Nuestra Historia",
+    legal: "Legal",
+    support: "Soporte",
+    contactUs: "Contáctanos",
+    name: "Tu Nombre",
+    email: "Correo Electrónico",
+    message: "Mensaje",
+    send: "Enviar Mensaje",
+    sent: "¡Mensaje Enviado!",
+    agenda: "Agenda",
+    realtime: "Tiempo Real",
+    winBig: "Gana en Grande con GoalStream Premium",
+    learnMore: "Saber Más",
+    allRights: "Todos los derechos reservados",
+    featuredStory: "Historia Destacada",
+    description: "El destino definitivo para los aficionados al fútbol. Resultados en tiempo real, noticias de última hora y análisis profundo.",
+    loading: "Cargando...",
+    error: "Error",
+    noMatches: "No hay partidos programados para hoy.",
+    refresh: "Actualizar",
+    pos: "Pos",
+    club: "Club",
+    mp: "PJ",
+    gd: "DG",
+    pts: "Pts",
+    table: "Tabla",
+    giants: "Gigantes Globales",
+    elite: "Élite",
+    competitions: "Competiciones"
+  },
+  fr: {
+    home: "Accueil",
+    news: "Actualités",
+    matches: "Matchs",
+    teams: "Équipes",
+    tournaments: "Compétitions",
+    admin: "Admin",
+    about: "À Propos",
+    privacy: "Confidentialité",
+    terms: "Conditions",
+    contact: "Contact",
+    liveNews: "Infos en Direct",
+    latestNews: "Dernières Infos",
+    sponsored: "Contenu Sponsorisé",
+    readMore: "Lire la Suite",
+    liveMatches: "Matchs en Direct",
+    allLeagues: "Toutes les Ligues",
+    topTeams: "Top Équipes",
+    selectTeam: "Sélectionnez une équipe pour voir l'effectif",
+    majorLeagues: "Grandes Ligues",
+    standings: "Classement",
+    adminPanel: "Panneau Admin",
+    publish: "Publier l'Article",
+    ourStory: "Notre Histoire",
+    legal: "Légal",
+    support: "Support",
+    contactUs: "Contactez-nous",
+    name: "Votre Nom",
+    email: "Adresse Email",
+    message: "Message",
+    send: "Envoyer le Message",
+    sent: "Message Envoyé !",
+    agenda: "Agenda",
+    realtime: "Temps Réel",
+    winBig: "Gagnez Gros avec GoalStream Premium",
+    learnMore: "En Savoir Plus",
+    allRights: "Tous droits réservés",
+    featuredStory: "À la Une",
+    description: "La destination ultime pour les fans de football. Scores en temps réel, infos de dernière minute et analyses approfondies.",
+    loading: "Chargement...",
+    error: "Erreur",
+    noMatches: "Aucun match prévu aujourd'hui.",
+    refresh: "Actualiser",
+    pos: "Pos",
+    club: "Club",
+    mp: "MJ",
+    gd: "DB",
+    pts: "Pts",
+    table: "Tableau",
+    giants: "Géants Mondiaux",
+    elite: "Élite",
+    competitions: "Compétitions"
+  },
+  pt: {
+    home: "Início",
+    news: "Notícias",
+    matches: "Jogos",
+    teams: "Equipes",
+    tournaments: "Competições",
+    admin: "Admin",
+    about: "Sobre Nós",
+    privacy: "Privacidade",
+    terms: "Termos",
+    contact: "Contato",
+    liveNews: "Notícias ao Vivo",
+    latestNews: "Últimas Notícias",
+    sponsored: "Conteúdo Patrocinado",
+    readMore: "Ler Mais",
+    liveMatches: "Jogos ao Vivo",
+    allLeagues: "Todas as Ligas",
+    topTeams: "Melhores Equipes",
+    selectTeam: "Selecione uma equipe para ver o elenco",
+    majorLeagues: "Grandes Ligas",
+    standings: "Classificação",
+    adminPanel: "Painel Admin",
+    publish: "Publicar Artigo",
+    ourStory: "Nossa História",
+    legal: "Legal",
+    support: "Suporte",
+    contactUs: "Contate-nos",
+    name: "Seu Nome",
+    email: "Endereço de E-mail",
+    message: "Mensagem",
+    send: "Enviar Mensagem",
+    sent: "Mensagem Enviada!",
+    agenda: "Agenda",
+    realtime: "Tempo Real",
+    winBig: "Ganhe Grande com GoalStream Premium",
+    learnMore: "Saber Mais",
+    allRights: "Todos os direitos reservados",
+    featuredStory: "Destaque",
+    description: "O destino final para os fãs de futebol. Resultados em tempo real, notícias de última hora e análises profundas.",
+    loading: "Carregando...",
+    error: "Erro",
+    noMatches: "Nenhum jogo agendado para hoje.",
+    refresh: "Atualizar",
+    pos: "Pos",
+    club: "Clube",
+    mp: "J",
+    gd: "SG",
+    pts: "Pts",
+    table: "Tabela",
+    giants: "Gigantes Globais",
+    elite: "Elite",
+    competitions: "Competições"
+  }
+};
 
 // --- Constants ---
 
@@ -244,6 +462,24 @@ export default function App() {
     return saved ? JSON.parse(saved) : ["PL", "CL"];
   });
   const [matchFilter, setMatchFilter] = useState<string>("ALL");
+  const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
+  const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [language, setLanguage] = useState<Language>(() => {
+    const saved = localStorage.getItem("goalstream_lang");
+    if (saved && ["en", "es", "fr", "pt"].includes(saved)) return saved as Language;
+    
+    const browserLang = navigator.language.slice(0, 2);
+    return ["en", "es", "fr", "pt"].includes(browserLang) ? (browserLang as Language) : "en";
+  });
+
+  const t = (key: keyof typeof TRANSLATIONS.en) => {
+    return TRANSLATIONS[language][key] || TRANSLATIONS.en[key];
+  };
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem("goalstream_lang", lang);
+  };
 
   // --- Data Fetching ---
 
@@ -373,6 +609,28 @@ export default function App() {
 
   // --- Render Helpers ---
 
+  const LanguageSwitcher = () => (
+    <div className="flex items-center gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100">
+      {(["en", "es", "fr", "pt"] as Language[]).map((lang) => (
+        <button
+          key={lang}
+          onClick={() => handleLanguageChange(lang)}
+          className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${
+            language === lang 
+              ? "bg-black text-white shadow-lg shadow-black/10" 
+              : "text-gray-400 hover:text-black hover:bg-gray-100"
+          }`}
+        >
+          {lang === "en" && "🇬🇧"}
+          {lang === "es" && "🇪🇸"}
+          {lang === "fr" && "🇫🇷"}
+          {lang === "pt" && "🇵🇹"}
+          <span className="ml-1">{lang}</span>
+        </button>
+      ))}
+    </div>
+  );
+
   const NavItem = ({ page, label, icon: Icon }: { page: Page; label: string; icon: any }) => (
     <button
       onClick={() => {
@@ -417,7 +675,7 @@ export default function App() {
             transition={{ delay: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <span className="bg-goal-accent text-black text-[10px] font-black uppercase px-3 py-1.5 inline-block tracking-widest rounded-sm">Featured Story</span>
+              <span className="bg-goal-accent text-black text-[10px] font-black uppercase px-3 py-1.5 inline-block tracking-widest rounded-sm">{t("featuredStory")}</span>
               {news[0]?.source && (
                 <span className="text-white/60 text-[10px] font-black uppercase tracking-widest border border-white/20 px-3 py-1.5 rounded-sm">
                   Source: {news[0].source}
@@ -438,11 +696,11 @@ export default function App() {
       <section className="max-w-screen-xl mx-auto px-6">
         <div className="flex items-end justify-between mb-12 border-b border-gray-100 pb-6">
           <div>
-            <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">The Latest</span>
-            <h3 className="text-4xl font-black uppercase tracking-tighter">Breaking News</h3>
+            <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("realtime")}</span>
+            <h3 className="text-4xl font-black uppercase tracking-tighter">{t("latestNews")}</h3>
           </div>
           <button onClick={() => setActivePage("news")} className="group text-sm font-black uppercase tracking-widest text-gray-400 hover:text-black flex items-center gap-2 transition-all">
-            Explore All <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            {t("learnMore")} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
         
@@ -485,7 +743,7 @@ export default function App() {
                   </p>
                   <div className="flex items-center justify-between pt-6 border-t border-gray-50">
                     <span className="text-[10px] font-black uppercase text-gray-300 tracking-widest">
-                      {new Date(article.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      {new Date(article.date).toLocaleDateString(language, { month: 'short', day: 'numeric' })}
                     </span>
                     <span className="text-goal-accent group-hover:translate-x-1 transition-transform">
                       <ChevronRight className="w-5 h-5" />
@@ -498,10 +756,9 @@ export default function App() {
         </motion.div>
       </section>
 
-      {/* Match Day Agenda */}
       <section className="max-w-screen-xl mx-auto px-6">
         <div className="bg-[#16a34a] p-5 rounded-2xl text-white font-black text-center mb-6 uppercase tracking-widest shadow-lg shadow-green-600/20">
-          Agenda - {new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}
+          {t("agenda")} - {new Date().toLocaleDateString(language, { day: 'numeric', month: 'long', year: 'numeric' })}
         </div>
         
         <div className="bg-white rounded-[2.5rem] premium-shadow border border-gray-50 overflow-hidden">
@@ -601,7 +858,7 @@ export default function App() {
               })
             ) : (
               <div className="p-20 text-center text-gray-400 font-bold uppercase tracking-widest text-sm">
-                No matches scheduled for today
+                {t("noMatches")}
               </div>
             )}
           </div>
@@ -613,8 +870,8 @@ export default function App() {
   const renderNews = () => (
     <div className="max-w-screen-lg mx-auto px-6 py-20">
       <div className="mb-16">
-        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Archive</span>
-        <h2 className="text-5xl font-black uppercase tracking-tighter">News Feed</h2>
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("liveNews")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("latestNews")}</h2>
       </div>
       
       <motion.div 
@@ -674,8 +931,8 @@ export default function App() {
     <div className="max-w-screen-md mx-auto px-6 py-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
         <div>
-          <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Real-time</span>
-          <h2 className="text-5xl font-black uppercase tracking-tighter">Live Matches</h2>
+          <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("realtime")}</span>
+          <h2 className="text-5xl font-black uppercase tracking-tighter">{t("liveMatches")}</h2>
         </div>
         <div className="flex items-center gap-4">
           <select 
@@ -683,7 +940,7 @@ export default function App() {
             onChange={(e) => setMatchFilter(e.target.value)}
             className="bg-white border border-gray-100 px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-goal-accent premium-shadow"
           >
-            <option value="ALL">All Leagues</option>
+            <option value="ALL">{t("allLeagues")}</option>
             {TOURNAMENTS.map(t => (
               <option key={t.id} value={t.id}>{t.name}</option>
             ))}
@@ -765,7 +1022,7 @@ export default function App() {
             <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
               <Calendar className="w-8 h-8 text-gray-300" />
             </div>
-            <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">No matches scheduled</p>
+            <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">{t("noMatches")}</p>
           </div>
         )}
       </motion.div>
@@ -775,8 +1032,8 @@ export default function App() {
   const renderTeams = () => (
     <div className="max-w-screen-xl mx-auto px-6 py-20">
       <div className="mb-16">
-        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Elite</span>
-        <h2 className="text-5xl font-black uppercase tracking-tighter">Global Giants</h2>
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("elite")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("giants")}</h2>
       </div>
       
       <motion.div 
@@ -807,8 +1064,8 @@ export default function App() {
   const renderTournaments = () => (
     <div className="max-w-screen-xl mx-auto px-6 py-20">
       <div className="mb-16">
-        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Competitions</span>
-        <h2 className="text-5xl font-black uppercase tracking-tighter">Major Leagues</h2>
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("competitions")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("majorLeagues")}</h2>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
@@ -862,7 +1119,7 @@ export default function App() {
           >
             <div className="p-10 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-1 block">Table</span>
+                <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-1 block">{t("table")}</span>
                 <h3 className="text-3xl font-black uppercase tracking-tighter">
                   {TOURNAMENTS.find(l => l.id === selectedLeague)?.name}
                 </h3>
@@ -874,11 +1131,11 @@ export default function App() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="text-[10px] font-black uppercase text-gray-400 border-b border-gray-100">
-                    <th className="px-10 py-6">Pos</th>
-                    <th className="px-10 py-6">Club</th>
-                    <th className="px-10 py-6 text-center">MP</th>
-                    <th className="px-10 py-6 text-center">GD</th>
-                    <th className="px-10 py-6 text-center">Pts</th>
+                    <th className="px-10 py-6">{t("pos")}</th>
+                    <th className="px-10 py-6">{t("club")}</th>
+                    <th className="px-10 py-6 text-center">{t("mp")}</th>
+                    <th className="px-10 py-6 text-center">{t("gd")}</th>
+                    <th className="px-10 py-6 text-center">{t("pts")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -918,8 +1175,8 @@ export default function App() {
   const renderAdmin = () => (
     <div className="max-w-screen-sm mx-auto px-6 py-20">
       <div className="mb-16 text-center">
-        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Creator</span>
-        <h2 className="text-5xl font-black uppercase tracking-tighter">Admin Panel</h2>
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("admin")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("adminPanel")}</h2>
       </div>
       
       <form onSubmit={handleAddArticle} className="bg-white p-12 rounded-[2.5rem] premium-shadow space-y-8 border border-gray-50">
@@ -946,6 +1203,173 @@ export default function App() {
     </div>
   );
 
+  const renderAbout = () => (
+    <div className="max-w-screen-md mx-auto px-6 py-20">
+      <div className="mb-16">
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("ourStory")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("about")}</h2>
+      </div>
+      <div className="prose prose-xl max-w-none text-gray-600 leading-relaxed space-y-8">
+        <p className="font-bold text-2xl text-black leading-tight">
+          GoalStream is the ultimate destination for football fans worldwide, delivering real-time scores, breaking news, and in-depth analysis.
+        </p>
+        <p>
+          Founded in 2026, our mission is to provide the fastest and most reliable football information to fans everywhere. Whether it's the Premier League, La Liga, or the World Cup, we bring the game closer to you with a premium, mobile-first experience.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-12">
+          <div className="bg-gray-50 p-10 rounded-[2.5rem] border border-gray-100">
+            <Trophy className="w-12 h-12 text-goal-accent mb-6" />
+            <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">Real-time Data</h3>
+            <p className="text-sm font-medium text-gray-500">Live scores and statistics from over 100+ global competitions updated every second.</p>
+          </div>
+          <div className="bg-gray-50 p-10 rounded-[2.5rem] border border-gray-100">
+            <Newspaper className="w-12 h-12 text-goal-accent mb-6" />
+            <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">Expert Analysis</h3>
+            <p className="text-sm font-medium text-gray-500">Breaking news and tactical breakdowns from our global network of football journalists.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPrivacy = () => (
+    <div className="max-w-screen-md mx-auto px-6 py-20">
+      <div className="mb-16">
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("legal")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("privacy")}</h2>
+      </div>
+      <div className="space-y-12 text-gray-600 leading-relaxed">
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">1. Data Collection</h3>
+          <p>We collect basic user information such as your email address when you sign up for our newsletter or create an account. We also collect usage data to improve our services and provide a better user experience.</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">2. Cookies & Advertising</h3>
+          <p>GoalStream uses cookies to personalize content and ads, to provide social media features, and to analyze our traffic. We also share information about your use of our site with our social media, advertising, and analytics partners (including Google AdSense).</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">3. Third-party Services</h3>
+          <p>We use third-party APIs and services to provide live scores, news feeds, and payment processing (Stripe). These services may collect data according to their own privacy policies.</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">4. Your Rights</h3>
+          <p>You have the right to access, correct, or delete your personal data at any time. If you have any questions about your privacy, please contact us.</p>
+        </section>
+      </div>
+    </div>
+  );
+
+  const renderTerms = () => (
+    <div className="max-w-screen-md mx-auto px-6 py-20">
+      <div className="mb-16">
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("legal")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("terms")}</h2>
+      </div>
+      <div className="space-y-12 text-gray-600 leading-relaxed">
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">1. Acceptance of Terms</h3>
+          <p>By accessing and using GoalStream, you agree to be bound by these Terms of Service and all applicable laws and regulations.</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">2. Use License</h3>
+          <p>Permission is granted to temporarily download one copy of the materials on GoalStream's website for personal, non-commercial transitory viewing only.</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">3. Disclaimer</h3>
+          <p>The materials on GoalStream are provided on an 'as is' basis. GoalStream makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+        </section>
+        <section>
+          <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">4. Limitations</h3>
+          <p>In no event shall GoalStream or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on GoalStream.</p>
+        </section>
+      </div>
+    </div>
+  );
+
+  const renderContact = () => (
+    <div className="max-w-screen-sm mx-auto px-6 py-20">
+      <div className="mb-16 text-center">
+        <span className="text-goal-accent font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">{t("support")}</span>
+        <h2 className="text-5xl font-black uppercase tracking-tighter">{t("contactUs")}</h2>
+      </div>
+      
+      {contactStatus === "sent" ? (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-green-50 border border-green-100 p-12 rounded-[2.5rem] text-center space-y-6"
+        >
+          <div className="bg-green-500 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+            <Check className="w-10 h-10" />
+          </div>
+          <h3 className="text-3xl font-black uppercase tracking-tighter">{t("sent")}</h3>
+          <p className="text-gray-500 font-medium">Thank you for reaching out. Our team will get back to you within 24 hours.</p>
+          <button 
+            onClick={() => setContactStatus("idle")}
+            className="text-xs font-black uppercase tracking-widest text-green-600 hover:text-green-700 transition-colors"
+          >
+            Send another message
+          </button>
+        </motion.div>
+      ) : (
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            setContactStatus("sending");
+            setTimeout(() => setContactStatus("sent"), 1500);
+          }}
+          className="bg-white p-12 rounded-[2.5rem] premium-shadow space-y-8 border border-gray-50"
+        >
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">{t("name")}</label>
+            <input 
+              required 
+              type="text" 
+              placeholder="John Doe" 
+              value={contactForm.name}
+              onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+              className="w-full p-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-goal-accent/20 transition-all font-bold" 
+            />
+          </div>
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">{t("email")}</label>
+            <input 
+              required 
+              type="email" 
+              placeholder="john@example.com" 
+              value={contactForm.email}
+              onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+              className="w-full p-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-goal-accent/20 transition-all font-bold" 
+            />
+          </div>
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">{t("message")}</label>
+            <textarea 
+              required 
+              rows={5} 
+              placeholder="..." 
+              value={contactForm.message}
+              onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+              className="w-full p-5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-goal-accent/20 transition-all font-bold resize-none" 
+            />
+          </div>
+          <button 
+            disabled={contactStatus === "sending"}
+            type="submit" 
+            className="w-full bg-black text-white font-black uppercase py-6 rounded-2xl hover:bg-gray-900 transition-all flex items-center justify-center gap-3 shadow-xl shadow-black/10 active:scale-[0.98] disabled:opacity-50"
+          >
+            {contactStatus === "sending" ? (
+              <RefreshCcw className="w-6 h-6 animate-spin" />
+            ) : (
+              <Send className="w-6 h-6" />
+            )}
+            {contactStatus === "sending" ? t("loading") : t("send")}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       {/* Top Navbar */}
@@ -961,19 +1385,25 @@ export default function App() {
             </button>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center gap-2">
-              <NavItem page="home" label="Home" icon={Home} />
-              <NavItem page="news" label="News" icon={Newspaper} />
-              <NavItem page="matches" label="Matches" icon={Calendar} />
-              <NavItem page="teams" label="Teams" icon={Users} />
-              <NavItem page="tournaments" label="Tournaments" icon={Trophy} />
-              <NavItem page="admin" label="Admin" icon={Settings} />
+            <div className="hidden lg:flex items-center gap-6">
+              <div className="flex items-center gap-1">
+                <NavItem page="home" label={t("home")} icon={Home} />
+                <NavItem page="news" label={t("news")} icon={Newspaper} />
+                <NavItem page="matches" label={t("matches")} icon={Calendar} />
+                <NavItem page="teams" label={t("teams")} icon={Users} />
+                <NavItem page="tournaments" label={t("tournaments")} icon={Trophy} />
+                <NavItem page="admin" label={t("admin")} icon={Settings} />
+              </div>
+              <LanguageSwitcher />
             </div>
 
             {/* Mobile Menu Toggle */}
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all active:scale-90">
-              {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-            </button>
+            <div className="flex items-center gap-2 lg:hidden">
+              <LanguageSwitcher />
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-3 hover:bg-gray-100 rounded-2xl transition-all active:scale-90">
+                {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -987,12 +1417,12 @@ export default function App() {
               className="lg:hidden border-t border-gray-100 overflow-hidden bg-white"
             >
               <div className="flex flex-col p-6 gap-4">
-                <NavItem page="home" label="Home" icon={Home} />
-                <NavItem page="news" label="News" icon={Newspaper} />
-                <NavItem page="matches" label="Matches" icon={Calendar} />
-                <NavItem page="teams" label="Teams" icon={Users} />
-                <NavItem page="tournaments" label="Tournaments" icon={Trophy} />
-                <NavItem page="admin" label="Admin" icon={Settings} />
+                <NavItem page="home" label={t("home")} icon={Home} />
+                <NavItem page="news" label={t("news")} icon={Newspaper} />
+                <NavItem page="matches" label={t("matches")} icon={Calendar} />
+                <NavItem page="teams" label={t("teams")} icon={Users} />
+                <NavItem page="tournaments" label={t("tournaments")} icon={Trophy} />
+                <NavItem page="admin" label={t("admin")} icon={Settings} />
               </div>
             </motion.div>
           )}
@@ -1015,6 +1445,10 @@ export default function App() {
             {activePage === "teams" && renderTeams()}
             {activePage === "tournaments" && renderTournaments()}
             {activePage === "admin" && renderAdmin()}
+            {activePage === "about" && renderAbout()}
+            {activePage === "privacy" && renderPrivacy()}
+            {activePage === "terms" && renderTerms()}
+            {activePage === "contact" && renderContact()}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -1031,18 +1465,18 @@ export default function App() {
                 <span className="text-4xl font-black tracking-tighter uppercase">GoalStream</span>
               </div>
               <p className="text-gray-400 text-xl font-medium max-w-md mx-auto lg:mx-0 leading-relaxed">
-                The ultimate destination for football fans. Real-time scores, breaking news, and in-depth analysis from the world of football.
+                {t("description")}
               </p>
             </div>
             <div className="flex flex-col items-center lg:items-end gap-12">
               <div className="flex flex-wrap justify-center lg:justify-end gap-10 text-xs font-black uppercase tracking-[0.2em] text-gray-500">
-                <button className="hover:text-goal-accent transition-colors">About Us</button>
-                <button className="hover:text-goal-accent transition-colors">Privacy Policy</button>
-                <button className="hover:text-goal-accent transition-colors">Terms of Service</button>
-                <button className="hover:text-goal-accent transition-colors">Contact</button>
+                <button onClick={() => setActivePage("about")} className="hover:text-goal-accent transition-colors">{t("about")}</button>
+                <button onClick={() => setActivePage("privacy")} className="hover:text-goal-accent transition-colors">{t("privacy")}</button>
+                <button onClick={() => setActivePage("terms")} className="hover:text-goal-accent transition-colors">{t("terms")}</button>
+                <button onClick={() => setActivePage("contact")} className="hover:text-goal-accent transition-colors">{t("contact")}</button>
               </div>
               <div className="text-gray-600 text-[10px] font-black uppercase tracking-[0.3em]">
-                © 2026 GoalStream Media Group. All Rights Reserved.
+                © 2026 GoalStream Media Group. {t("allRights")}.
               </div>
             </div>
           </div>
